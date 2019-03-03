@@ -146,7 +146,7 @@ services:
       - grafana-dashboards-data
     environment:
       GF_INSTALL_PLUGINS: grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource,grafana-piechart-panel
-      GF_SERVER_ROOT_URL: ${grafana_root_url}
+      GF_SERVER_ROOT_URL: https://${grafana_subdomain}.${service_tld}
       GF_AUTH_GITLAB_ENABLED: true
       GF_AUTH_GITLAB_ALLOW_SIGN_UP: true
       GF_AUTH_GITLAB_CLIENT_ID: 19526f84da9ead90fe67e5a9e16a8c55ab46244136029bd98d8a55bd5919e2aa

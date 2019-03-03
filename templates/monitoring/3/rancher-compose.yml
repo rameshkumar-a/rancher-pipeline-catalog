@@ -49,19 +49,25 @@ version: '2'
     default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/host-metrics-dashboard.json https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/ops-gitlab-dashboard.json
     https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/ops-traefik.json"
     required: true
-    type: "multiline"
-  - variable: "grafana_root_url"
-    label: "grafana_root_url :"
-    description: "Grafana URL"
-    default: "https://grafana.sandbox.ericssondevops.com"
-    required: true
-    type: "multiline"    
+    type: "multiline" 
   - variable: "grafana_git_lab_url"
-    label: "grafana_git_lab_url :"
+    label: "Grafana gitlab intergration url :"
     description: "Grafana URL"
     default: "https://gitlab.sandbox.ericssondevops.com"
     required: true
-    type: "multiline"      
+    type: "string"   
+  - variable: "gf_auth_gitlab_client_id"
+    label: "Gitlab clinet id :"
+    description: "Grafana URL"
+    default: "XXXXXXXXXXXXXXXXXX"
+    required: true
+    type: "string" 
+  - variable: "gf_auth_gitlab_client_secret"
+    label: "Gitlab Clinet Secret :"
+    description: "Grafana URL"
+    default: "XXXXXXXXXXXXXXXXXX"
+    required: true
+    type: "string"     
   - variable: "use_dns_name_check"
     label: "Sensu DNS:"
     description: "Using DNS Hostname for Sensu"

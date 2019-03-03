@@ -154,7 +154,7 @@ services:
       GF_AUTH_GITLAB_SCOPES: read_user
       GF_AUTH_GITLAB_AUTH_URL: ${grafana_git_lab_url}/oauth/authorize
       GF_AUTH_GITLAB_TOKEN_URL: ${grafana_git_lab_url}/oauth/token
-      GF_AUTH_GIT_LAB_API_URL: ${grafana_git_lab_url}/api/v4
+      GF_AUTH_GITLAB_API_URL: ${grafana_git_lab_url}/api/v4
   grafana-datasource:
     labels:
         io.rancher.container.start_once: true

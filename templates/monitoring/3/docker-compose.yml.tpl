@@ -155,7 +155,6 @@ services:
       - GF_AUTH_GIT_LAB_AUTH_URL=${grafana_git_lab_url}/oauth/authorize
       -	GF_AUTH_GIT_LAB_TOKEN_URL=${grafana_git_lab_url}/oauth/token
       -	GF_AUTH_GIT_LAB_API_URL=${grafana_git_lab_url}/api/v4
-      -	GF_AUTH_GIT_LAB_ALLOWED_GROUPS=
   grafana-datasource:
     labels:
         io.rancher.container.start_once: true

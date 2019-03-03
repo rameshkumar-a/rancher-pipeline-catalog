@@ -146,15 +146,15 @@ services:
       - grafana-dashboards-data
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource,grafana-piechart-panel
-      - GF_SERVER_ROOT_URL=https://grafana.sandbox.ericssondevops.com
+      - GF_SERVER_ROOT_URL=${grafana_root_url}
       - GF_AUTH_GIT_LAB_ENABLED=true
       - GF_AUTH_GIT_LAB_ALLOW_SIGN_UP=true
       - GF_AUTH_GIT_LAB_CLIENT_ID=19526f84da9ead90fe67e5a9e16a8c55ab46244136029bd98d8a55bd5919e2aa
       - GF_AUTH_GIT_LAB_CLIENT_SECRET=fa044821ef34a91bd970b485495f0b9c6e53c324aa83aff055a109e9cc453163
       - GF_AUTH_GIT_LAB_SCOPES=read_user
-      - GF_AUTH_GIT_LAB_AUTH_URL=https://gitlab.sandbox.ericssondevops.com/oauth/authorize
-      -	GF_AUTH_GIT_LAB_TOKEN_URL=https://gitlab.sandbox.ericssondevops.com/oauth/token
-      -	GF_AUTH_GIT_LAB_API_URL=https://gitlab.sandbox.ericssondevops.com/api/v4
+      - GF_AUTH_GIT_LAB_AUTH_URL=${grafana_git_lab_url}/oauth/authorize
+      -	GF_AUTH_GIT_LAB_TOKEN_URL=${grafana_git_lab_url}/oauth/token
+      -	GF_AUTH_GIT_LAB_API_URL=${grafana_git_lab_url}/api/v4
       -	GF_AUTH_GIT_LAB_ALLOWED_GROUPS=
   grafana-datasource:
     labels:

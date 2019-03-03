@@ -1,0 +1,64 @@
+version: '2'
+services:
+  rundeckmysql:
+    scale: 1
+    start_on_create: true
+  rundeck:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 4440
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+.catalog:
+  name: "Rundeck"
+  version: "rundeck-3.0.8"
+  description: "Rundeck  Rancher Application"
+  minimum_rancher_version: v0.46.0
+  questions:
+    - variable: "volumedriver"
+      description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+      label: "Volume Driver:"
+      required: true
+      default: local
+      type: "enum"
+      options:
+        - local
+        - rancher-nfs
+    - variable: "rundeck_protocol"
+      label: "RunDeck Protocol:"
+      description: "Protocol to host RunDeck"
+      required: true
+      default: http
+      type: "enum"
+      options:
+        - http
+        - https
+    - variable: "rundeck_subdomain"
+      label: "RunDeck Subdomain:"
+      description: "RunDeck DNS Subdomain"
+      default: "rundeck"
+      required: true
+      type: "string"
+    - variable: "service_tld"
+      label: "Service TLD:"
+      description: "Domain to register"
+      default: "example.com"
+      required: true
+      type: "string"
+    - variable: "mysql_username"
+      label: "MySQL Username:"
+      description: "RunDeck MySQL DB Username"
+      required: true
+      default: "rundeck"
+      type: "string"
+    - variable: "mysql_password"
+      label: "MySQL Password:"
+      description: "RunDeck MySQL DB Password"
+      required: true
+      type: "password"

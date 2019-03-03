@@ -1,0 +1,5 @@
+name: ELK
+description: |
+  ElasticSearch, LogStash and Kibana for centralized logging
+version: 6.5.0-0
+category: Applications

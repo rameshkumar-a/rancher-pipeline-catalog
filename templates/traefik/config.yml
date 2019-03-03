@@ -1,0 +1,7 @@
+name: Traefik
+description: |
+  traefik
+version: v1.7.9-0-rancher
+category: Applications
+maintainer: "Ericsson, Inc"
+projectURL: https://traefik.io/

@@ -1,0 +1,7 @@
+name: Rundeck
+description: |
+  Rundeck
+version: rundeck-3.0.13
+category: Applications
+maintainer: "Ericsson, Inc"
+projectURL: www.rundeck.org

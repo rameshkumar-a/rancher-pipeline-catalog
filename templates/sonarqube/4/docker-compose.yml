@@ -1,0 +1,72 @@
+version: '2'
+volumes:
+  sonarqube-app-data:
+    driver: ${volumedriver}
+  sonarqube-conf-data:
+    driver: ${volumedriver}
+  sonarqube-plugin-data:
+    driver: ${volumedriver}
+  postgres-data:
+    driver: ${volumedriver}
+services:    
+    sonarqube:
+      environment:
+        SONARQUBE_JDBC_USERNAME: ${sonarqube_db_login}
+        SONARQUBE_JDBC_PASSWORD: ${sonarqube_db_password}
+        SONARQUBE_JDBC_URL: jdbc:postgresql://postgres/${sonarqube_db_name}
+      labels:
+        io.rancher.sidekicks: sonarqube-datavolume,sonarqube-plugin
+        traefik.enable: ${use_dns_name_check}
+        traefik.domain: ${domain_to_register_dns}
+        traefik.port: 9000
+        traefik.alias.fqdn: ${dns_name_value}
+        traefik.frontend.rule: Host:${dns_name_value}
+      links:
+      - postgresql
+      tty: true
+      image: sonarqube:7.1
+      volumes_from:
+      - sonarqube-plugin
+      - sonarqube-datavolume
+      stdin_open: true    
+    sonarqube-plugin:
+      labels:
+        io.rancher.container.start_once: true
+      tty: true
+      #  build: .
+      image: busybox
+      #image: rameshkumara/sonarqube-plugin:1.0
+      command: wget -P /opt/sonarqube/extensions/plugins/ ${plugins} 
+      container_name: sonarqube-plugin
+      volumes: 
+      - sonarqube-plugin-data:/opt/sonarqube/extensions/plugins   
+    sonarqube-datavolume:
+      labels:
+        io.rancher.container.start_once: 'true'
+      tty: true
+      image: busybox
+      volumes:
+      - sonarqube-app-data:/opt/sonarqube/data
+      - sonarqube-conf-data:/opt/sonarqube/conf
+      stdin_open: true
+    sonarqube-authentication-setup:
+      tty: true
+      image: bash
+      entrypoint: bash
+      command: 
+      - -c
+      - " apk add curl; for ((i=1; i<=30; i=i+1)); do  http_response=`curl -u \"admin:admin\" http://sonarqube:9000/api/system/health -s | grep \"GREEN\"`;   echo  ${http_response};   if [ \"$${http_response}\" != \"\" ]; then    sleep 20;   if [ \"${set_gitlab_oauth_config}\" == \"true\" -a \"${sonarqube_gitlab_oauth_app_id}\" != \"\" -a \"${sonarqube_gitlab_oauth_app_id}\" != \"\" ]; then       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.enabled\" --data-urlencode \"value=true\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.applicationId\" --data-urlencode \"value=${sonarqube_gitlab_oauth_app_id}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.secret\" --data-urlencode \"value=${sonarqube_gitlab_oauth_app_secret}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.core.serverBaseURL\" --data-urlencode \"value=https://${dns_name_value}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.sync_user_groups\" --data-urlencode \"value=true\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.url\" --data-urlencode \"value=https://${sonarqube_gitlab_hostname}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.forceAuthentication\" --data-urlencode \"value=true\"  \"http://sonarqube:9000/api/properties\";     else       echo \"Skipping GitLab Auth configuration on Sonarqube.\";     fi;     if [ \"$sonarqube_admin_password\" != \"\" ]; then       curl -X POST -u admin:admin --data-urlencode \"login=admin\" --data-urlencode \"password=${sonarqube_admin_password}\" --data-urlencode \"previousPassword=admin\" \"http://sonarqube:9000/api/users/change_password\";      fi;     break;  fi;	  sleep 20; done"
+      labels:
+        io.rancher.container.start_once: 'true'
+      links:
+        - sonarqube
+    postgresql:
+    image: postgres
+    environment:
+      - POSTGRES_USER=${sonarqube_db_login}
+      - POSTGRES_PASS=${sonarqube_db_password}
+      - POSTGRES_DB=${sonarqube_db_name}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    ports:
+      - "5432:5432"

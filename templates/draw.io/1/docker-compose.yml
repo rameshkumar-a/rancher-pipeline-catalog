@@ -1,0 +1,10 @@
+version: '2'
+services:
+  drawio:
+    image: fjudith/draw.io
+    labels:
+      traefik.port: '8080'
+      traefik.enable: stack
+      traefik.domain: ${service_tld}
+      traefik.alias.fqdn: ${drawio_subdomain}.${service_tld}
+      io.rancher.container.pull_image: always

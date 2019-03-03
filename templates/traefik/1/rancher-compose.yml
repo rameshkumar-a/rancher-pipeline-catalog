@@ -1,0 +1,190 @@
+version: '2'
+catalog:
+  name: traefik
+  version: v1.6.5.1-rancher1
+  description: |
+    Traefik load balancer.
+  minimum_rancher_version: v0.59.0 
+  uuid: traefik-0
+  questions:
+    - variable: "rancher_integration"
+      label: "Choose rancher integration:"
+      description: |
+        Enable rancher integration mode. Traefik built in integration, metadata or api, or external sidekick integration with confd.
+      default: metadata
+      required: true
+      type: enum
+      options:
+        - metadata
+        - api
+        - external
+    - variable: "rancher_healthcheck"
+      description: | 
+        Enable/disable rancher services healtcheck filter. If enable, just healthy services will be published.
+        Only valid for api and metadata integration. 
+      label: "Rancher healthcheck filter:"
+      required: true
+      default: false 
+      type: "boolean"
+    - variable: "usage_enable"
+      description: | 
+        Enable/disable send anonymous usage collection to Traefik. See https://docs.traefik.io/basics/#collected-data
+      label: "Traefik send anonymous usage:"
+      required: true
+      default: false 
+      type: "boolean"
+    - variable: "constraints"
+      description: |
+        Traefik constraints for rancher provider. Eg: "tag==api"
+        Only valid for api and metadata integration.
+      label: "Traefik constraints:"
+      required: false
+      default: ""
+      type: "string"
+    - variable: "host_label"
+      description: "Host label where to run traefik service."
+      label: "Host label:"
+      required: true
+      default: "traefik_lb=true" 
+      type: "string"
+    - variable: "admin_statistics"
+      description: "Enable more detailed statistics."
+      label: "Admin statistics history:"
+      required: true
+      default: 10
+      type: "int"
+    - variable: "admin_auth_method"
+      description: "Admin auth method on api, rest and webui."
+      label: "Admin auth method:"
+      required: true
+      default: "basic"
+      type: enum
+      options: # List of options if using type of `enum`
+        - basic
+        - digest
+    - variable: "admin_users"
+      description: "Admin auth user list on api, rest and webui. Generate with htpassword for basic or htdigest with traefik realm for digest."
+      label: "Admin users:"
+      type: "multiline"
+      required: false
+      default: ""
+    - variable: "metrics_enable"
+      description: "Enable traefik metrics."
+      label: "Metrics enable"
+      default: false
+      required: true
+      type: "boolean"
+    - variable: "metrics_exporter"
+      description: "Traefik metrics exporter."
+      label: "Metrics exporter:"
+      required: false
+      default: 
+      type: enum
+      options: # List of options if using type of `enum`
+        - prometheus
+        - datadog
+        - statsd
+        - influxdb
+    - variable: "metrics_push"
+      description: "Traefik metrics exporter push interval. Apply on datadog, statsd and influxdb."
+      label: "Metrics push interval (s):"
+      required: false
+      default: 10 
+      type: "int"
+    - variable: "metrics_address"
+      description: "Traefik metrics exporter address to push. Apply on datadog, statsd and influxdb."
+      label: "Metrics address:"
+      required: false
+      default: ""
+      type: "string"
+    - variable: "metrics_prometheus_buckets"
+      description: "Traefik metrics buckets for prometheus."
+      label: "Metrics prometheus buckets"
+      default: "[0.1,0.3,1.2,5.0]"
+      required: false
+      type: "string"
+    - variable: "LB_SSL_CERT"
+      description: "Select LB SSL certificate." 
+      label: "LB SSL certificate:"
+      required: true
+      default: ""
+      type: "certificate"
+    - variable: "LB_PROTOCOL"
+      description: "LB protocol"
+      label: "LB protocol :"
+      required: true
+      default: "https"
+      type: "enum"
+      options:
+        - http
+        - https
+    - variable: "TRAEFIK_LB_PUBLISH_PORT"
+      label: "Traefik LB Publish port"
+      description: |
+        Set port if you want publish external port for Load Balancer server.
+      required: true
+      type: "int"
+      default: 443
+    - variable: "TRAEFIK_LB_HOST_URL"
+      label: "Traefik LB Host URL"
+      description: |
+        Host URL for LB
+      required: false
+      type: "string"           
+    - variable: "JFROG_LB_HOST_URL"
+      label: "Jfrog LB Host URL"
+      description: |
+        Host URL for Jfrog
+      required: false
+      type: "string"
+    - variable: "JFROG_DOCKER_REPO_URL"
+      label: "Jfrog Docker Repo URL"
+      description: |
+        Host URL for Jfrog Docker Repo
+      required: false
+      type: "string"
+    - variable: "JFROG_LINK"
+      description: |
+         stack/service link or external service link to Jfrog.
+      label: "Jfrog stack/service"
+      required: false
+      type: "service"      
+services:
+  traefik:
+    retain_ip: true
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 5000
+      port: 8000      
+      unhealthy_threshold: 3
+      interval: 5000
+      strategy: recreate
+  traefik-lb:
+    scale: 1
+    lb_config:
+      certs: []
+      default_cert: ${LB_SSL_CERT}
+      port_rules:
+      - priority: 1
+        protocol: ${LB_PROTOCOL}
+        service: traefik
+        source_port: 443
+        target_port: 8000
+        hostname: ${TRAEFIK_LB_HOST_URL}
+      - priority: 2
+        protocol: ${LB_PROTOCOL}
+        service: traefik
+        source_port: 443
+        target_port: 8080
+        hostname: ${JFROG_LB_HOST_URL}  
+      - priority: 3
+        protocol: ${LB_PROTOCOL}
+        service: ${JFROG_LINK}
+        source_port: 443
+        target_port: 8081
+        hostname: ${JFROG_DOCKER_REPO_URL}  
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 42
+      unhealthy_threshold: 3

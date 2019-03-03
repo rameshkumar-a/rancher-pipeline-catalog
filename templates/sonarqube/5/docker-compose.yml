@@ -1,0 +1,60 @@
+version: '2'
+volumes:
+  sonarqube-app-data:
+    driver: ${volumedriver}
+  sonarqube-conf-data:
+    driver: ${volumedriver}
+  sonarqube-plugin-data:
+    driver: ${volumedriver}
+  postgres-data:
+    driver: ${volumedriver}
+services:
+  sonarqube:
+    environment:
+      SONARQUBE_JDBC_USERNAME: ${postgres_username}
+      SONARQUBE_JDBC_PASSWORD: ${postgres_password}
+      SONARQUBE_JDBC_URL: jdbc:postgresql://${postgres_database_host}/${postgres_database_name}
+    labels:
+      io.rancher.sidekicks: sonarqube-plugin
+      traefik.enable: stack
+      traefik.domain: ${service_tld}
+      traefik.port: 9000
+      traefik.alias.fqdn: ${sonarqube_subdomain}.${service_tld}
+    links:
+      - postgresql
+    tty: true
+    image: sonarqube:7.1
+    volumes:
+      - sonarqube-app-data:/opt/sonarqube/data
+      - sonarqube-conf-data:/opt/sonarqube/conf
+    volumes_from:
+      - sonarqube-plugin
+    stdin_open: true
+  sonarqube-plugin:
+    labels:
+      io.rancher.container.start_once: true
+    tty: true
+    image: busybox
+    command: wget -P /opt/sonarqube/extensions/plugins/ ${plugins}
+    container_name: sonarqube-plugin
+    volumes:
+      - sonarqube-plugin-data:/opt/sonarqube/extensions/plugins
+  sonarqube-authentication-setup:
+    tty: true
+    image: bash
+    entrypoint: bash
+    command:
+      - -c
+      - " apk add curl; for ((i=1; i<=30; i=i+1)); do  http_response=`curl -u \"admin:admin\" http://sonarqube:9000/api/system/health -s | grep \"GREEN\"`;   echo  ${http_response};   if [ \"$${http_response}\" != \"\" ]; then    sleep 20;   if [ \"${set_gitlab_oauth_config}\" == \"true\" -a \"${gitlab_oauth_app_id}\" != \"\" -a \"${gitlab_oauth_app_id}\" != \"\" ]; then       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.enabled\" --data-urlencode \"value=true\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.applicationId\" --data-urlencode \"value=${gitlab_oauth_app_id}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.secret\" --data-urlencode \"value=${gitlab_oauth_app_secret}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.core.serverBaseURL\" --data-urlencode \"value=${service_url_prefix}${sonarqube_subdomain}.${service_tld}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.sync_user_groups\" --data-urlencode \"value=true\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.auth.gitlab.url\" --data-urlencode \"value=${gitlab_hostname}\"  \"http://sonarqube:9000/api/properties\";       curl -X POST -u \"admin:admin\" --data-urlencode \"id=sonar.forceAuthentication\" --data-urlencode \"value=true\"  \"http://sonarqube:9000/api/properties\";     else       echo \"Skipping GitLab Auth configuration on Sonarqube.\";     fi;     if [ \"$sonarqube_admin_password\" != \"\" ]; then       curl -X POST -u admin:admin --data-urlencode \"login=admin\" --data-urlencode \"password=${sonarqube_admin_password}\" --data-urlencode \"previousPassword=admin\" \"http://sonarqube:9000/api/users/change_password\";      fi;     break;  fi;	  sleep 20; done"
+    labels:
+      io.rancher.container.start_once: 'true'
+    links:
+      - sonarqube
+  postgresql:
+    image: postgres:9.6-alpine
+    environment:
+      - POSTGRES_USER=${postgres_username}
+      - POSTGRES_PASS=${postgres_password}
+      - POSTGRES_DB=${postgres_database_name}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data

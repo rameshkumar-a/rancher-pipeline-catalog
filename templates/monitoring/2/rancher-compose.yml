@@ -1,0 +1,163 @@
+version: '2'
+.catalog:
+  name: "Monitoring App "
+  version: "Monitoring-1.2"
+  description: "Sensu ,influxdb ,grafana application"
+  questions:
+  - variable: "configuration_repo_path"
+    label: "Configuration Repo Path:"
+    description: "Path to repo which contains monitoring configs"
+    required: true
+    type: "string"
+    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config"
+  - variable: "influxdb_admin_password"
+    label: "InfluxDB Admin Password:"
+    description: "InfluxDB Admin Password"
+    required: true
+    type: "password"
+  - variable: "influxdb_db_password"
+    label: "InfluxDB Metric DB Password:"
+    description: "InfluxDB Metric Database Password"
+    required: true
+    type: "password"
+  - variable: "mattermost_username"
+    label: "MatterMost User Name:"
+    description: "MatterMost User Name , used in mattermost handler"
+    required: true
+    type: "string"
+  - variable: "mattermost_url"
+    label: "Mattermost Hook URL :"
+    description: "Mattermost Hook URL used in mattermost handler"
+    default: "https://mattermost.example.com/hooks/xxxxxxxxxxxx"
+    required: true
+    type: "multiline"
+  - variable: "grafana_datasource_path"
+    label: "Grafana Datasource Location:"
+    description: "Location of Grafana Datasource yaml"
+    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/datasource/datasource.yaml"
+    required: true
+    type: "multiline"
+  - variable: "grafana_dashboard_path"
+    label: "Grafana Dashboard Location:"
+    description: "Location of Grafana Dashboard yaml"
+    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/dashboard.yaml"
+    required: true
+    type: "multiline"
+  - variable: "grafana_dashboard_json"
+    label: "List of Grafana Dashboards Location :"
+    description: "List of location of Grafana Dashboard JSON"
+    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/host-metrics-dashboard.json https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/ops-gitlab-dashboard.json
+    https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/ops-traefik.json"
+    required: true
+    type: "multiline"
+  - variable: "use_dns_name_check"
+    label: "Sensu DNS:"
+    description: "Using DNS Hostname for Sensu"
+    default: "true"
+    required: true
+    type: "enum"
+    options:
+      - "true"
+      - "false"
+  - variable: "service_tld"
+    label: "Service TLD:"
+    description: "Domain to register"
+    default: "example.com"
+    required: true
+    type: "string"
+  - variable: "uchiwa_subdomain"
+    label: "Uchiwa Subdomain:"
+    description: "Uchiwa Dashboard Subdomain"
+    default: "uchiwa"
+    required: true
+    type: "string"
+  - variable: "grafana_subdomain"
+    label: "Grafana Subdomain:"
+    description: "Grafana DNS Subdomain"
+    default: "grafana"
+    required: true
+    type: "string"
+  - variable: "influxdb_subdomain"
+    label: "InfluxDB Subdomain:"
+    description: "influxdb DNS Subdomain"
+    default: "influxdb"
+    required: true
+    type: "string"
+  - variable: "default_check_url"
+    label: "Default Check URL:"
+    description: "Host need to be monitored"
+    default: "sonarqube.example.com"
+    required: true
+    type: "string"
+  - variable: "default_check_name"
+    label: "Default Check Name:"
+    description: "Check Name for Site"
+    default: "SonarQube_check"
+    required: true
+    type: "string"
+  - variable: "datacenter_name"
+    label: "Datacenter Name:"
+    description: "Data Center Name"
+    default: "Demo-DC"
+    required: true
+    type: "string"
+  - variable: "volumedriver"
+    description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+    label: "Volume Driver:"
+    required: true
+    default: local
+    type: "enum"
+    options:
+      - local
+      - rancher-nfs
+services:
+  redis:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 6379
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  api:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 4567
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  uchiwa:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 3000
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  influxdb:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 8086
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  grafana:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 3000
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate

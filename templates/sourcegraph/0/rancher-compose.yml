@@ -1,0 +1,62 @@
+version: '2'
+services:
+  python:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 2087
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  java:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 2088
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  sourcegraph:
+    scale: 1
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 7080
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  go:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 4389
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  php:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 2088
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate
+  typescript:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 2088
+      unhealthy_threshold: 3
+      interval: 3000
+      strategy: recreate

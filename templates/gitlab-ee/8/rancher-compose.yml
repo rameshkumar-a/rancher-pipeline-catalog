@@ -1,0 +1,288 @@
+%version: '2'
+catalog:
+  name: GitLab Enterprise
+  version: gitlab-11.8.0-ee.0
+  description: |
+    GitLab Enterprise Edition docker image based on the Omnibus package
+  minimum_rancher_version: v0.56.0
+  maintainer: "Ericsson, Inc"
+  uuid: gitlab-ee-2
+  questions:
+    - variable: "service_tld"
+      label: "Service TLD:"
+      description: "Domain to register"
+      default: "example.com"
+      required: true
+      type: "string"
+    - variable: "gitlab_subdomain"
+      description: "GitLab Subdomain"
+      label: "GitLab hostname:"
+      required: true
+      default: "gitlab"
+      type: "string"
+    - variable: "volumedriver"
+      description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+      label: "Volume Driver:"
+      required: true
+      default: local
+      type: "enum"
+      options:
+        - local
+        - rancher-nfs
+    - variable: "gitlab_external_url_prefix"
+      label: "GitLab external_url Prefix:"
+      description: |
+        This is needed for the docker-compose file to set the correct external_url
+      default: 'http://'
+      required: true
+      type: "enum"
+      options:
+        - 'http://'
+        - 'https://'
+    - variable: "nginx_listen_port"
+      description: "Nginx Listen Port"
+      label: "Nginx Listen Port:"
+      required: false
+      default: 80
+      type: "int"
+    - variable: "nginx_listen_https"
+      description: "Nginx Listen Https"
+      label: "Nginx Listen HTTPS:"
+      required: false
+      default: false
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "nginx_redirect_http_to_https"
+      description: "Nginx Redirect Http To Https"
+      label: "Nginx Redirect HTTP To HTTPS:"
+      required: false
+      default: false
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "gitlab_ssh_port"
+      description: "SSH port to expose on host. Will be used to bind TCP"
+      label: "SSH Port:"
+      required: true
+      default: 2222
+      type: "int"
+    - variable: "gitlab_ssh_host"
+      description: "GitLab SSH Host (without uri scheme http:// or https://)"
+      label: "GitLab SSH Host:"
+      required: true
+      default: "git.example.com"
+      type: "string"
+    - variable: "plantuml_enabled"
+      description: "Enable or disable the plant uml configuration"
+      label: "PlantUML Enabled:"
+      required: false
+      default: true
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "gitlab_root_password"
+      description: "GitLab root password, only takes effect if PlantUML is enabled"
+      label: "GitLab Root Password:"
+      required: true
+      type: "password"
+    - variable: "plantuml_url_prefix"
+      label: "PlantUML URL Prefix:"
+      description: |
+        PlantUML URL prefix
+      default: 'http://'
+      required: true
+      type: "enum"
+      options:
+        - 'http://'
+        - 'https://'
+    - variable: "plantuml_subdomain"
+      label: "PlantUML Subdomain:"
+      description: "Domain to host PlantUML"
+      default: "plantuml"
+      type: "string"
+      required: true
+    - variable: "plantuml_port"
+      description: "Set the port in which plantuml will be exposed"
+      label: "PlantUML Port:"
+      required: true
+      default: 8080
+      type: "int"
+    - variable: "pages_enabled"
+      label: "Enable GitLab Pages:"
+      description: "Enable GitLab pages"
+      default: "true"
+      required: true
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "pages_url_prefix"
+      label: "GitLab Pages URL Prefix:"
+      description: |
+        GitLab Pages URL prefix
+      default: 'http://'
+      required: true
+      type: "enum"
+      options:
+        - 'http://'
+        - 'https://'
+    - variable: "pages_subdomain"
+      label: "GitLab Pages Subdomain:"
+      description: "Domain to host GitLab Pages"
+      default: "gitpages"
+      type: "string"
+      required: true
+    - variable: "pages_port"
+      description: "Port to expose GitLab Pages on host. Will be used to bind TCP"
+      label: "GitLab Pages Port:"
+      required: true
+      default: 8090
+      type: "int"
+    - variable: "azure_auth_enabled"
+      label: "Azure Auth Enabled:"
+      description: "Enable Azure Active directory authentication"
+      default: "true"
+      required: false
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "default_user_able_to_create_groups"
+      label: "Is default user able to create groups?"
+      description: "If set to false, users by default will not be able to create groups."
+      default: "false"
+      required: false
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "azure_auth_client_id"
+      description: "Azure auth client ID"
+      label: "Azure Auth Client ID:"
+      required: false
+      type: "string"
+    - variable: "azure_auth_client_secret"
+      description: "Azure auth client secret"
+      label: "Azure Auth Client Secret:"
+      required: false
+      type: "string"
+    - variable: "azure_auth_tenant_id"
+      description: "Azure auth tenant id"
+      label: "Azure Auth Tenant ID:"
+      required: false
+      type: "string"
+    - variable: "email_from"
+      description: "Sender mail id"
+      label: "Email From:"
+      required: false
+      type: "string"
+    - variable: "email_display_name"
+      description: "Email Subject"
+      label: "Email Subject:"
+      required: false
+      default: "DevOps"
+      type: "string"
+    - variable: "email_reply_to"
+      description: "Reciever mail id"
+      label: "Email To:"
+      required: false
+      type: "string"
+    - variable: "smtp_enable"
+      description: "SMTP Enable"
+      label: "SMTP Enable:"
+      required: false
+      default: true
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "smtp_address"
+      description: "SMTP address"
+      label: "SMTP Address:"
+      required: false
+      default: "smtp.sendgrid.net"
+      type: "string"
+    - variable: "smtp_port"
+      description: "SMTP port"
+      label: "SMTP Port:"
+      required: false
+      default: 587
+      type: "int"
+    - variable: "smtp_user_name"
+      description: "SMTP user name"
+      label: "SMTP Username:"
+      required: false
+      type: "string"
+    - variable: "smtp_password"
+      description: "SMTP password"
+      label: "SMTP Password:"
+      required: false
+      type: "string"
+    - variable: "smtp_domain"
+      description: "SMTP domain"
+      label: "SMTP Domain:"
+      required: false
+      default: "smtp.sendgrid.net"
+      type: "string"
+    - variable: "smtp_authentication"
+      description: "SMTP authentication"
+      label: "SMTP Authentication:"
+      required: false
+      default: "login"
+      type: "string"
+    - variable: "enable_starttls_auto"
+      description: "SMTP start tls auto"
+      label: "SMTP Start Tls Auto:"
+      required: false
+      default: true
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "client_max_body_size"
+      description: "Client Max Body Size"
+      label: "Client Max Body Size:"
+      required: false
+      default: 250M
+      type: "string"
+    - variable: "mattermost_enabled"
+      description: "Enable MatterMost"
+      label: "Enable MatterMost:"
+      required: true
+      default: false
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "mattermost_url_prefix"
+      label: "MatterMost URL Prefix:"
+      description: |
+         Mattermost URL Prefix
+      default: 'http://'
+      required: true
+      type: "enum"
+      options:
+        - 'http://'
+        - 'https://'
+    - variable: "mattermost_subdomain"
+      description: "Mattermost Subdomain"
+      label: "Domain to host MatterMost:"
+      required: true
+      default: "mattermost"
+      type: "string"
+    - variable: "mattermost_team_site_name"
+      description: "i.e. DevOps Mattermost Server"
+      label: "Mattermost Team Site Name:"
+      required: true
+      default: "DevOps Mattermost Server"
+      type: "string"
+    - variable: "internal_gitlab_subdomain"
+      description: "Internal GitLab Sudomain, useful for BeyondCorp style of network. may be required for Mattermost"
+      label: "Alternate (internal) Domain to host GitLab:"
+      required: true
+      default: "gitlab-auth"
+      type: "string"

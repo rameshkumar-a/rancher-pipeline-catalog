@@ -1,0 +1,5 @@
+name: Gitlab Enterprise
+description: |
+  GitLab Enterprise Edition docker image based on the Omnibus package
+version: gitlab-11.8.0-ee.0
+category: Versioning

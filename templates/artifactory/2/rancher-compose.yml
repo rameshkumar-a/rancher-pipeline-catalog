@@ -1,0 +1,58 @@
+version: '2'
+.catalog:
+  name: "JFrog Artifactory"
+  version: "artifactory-6.1.0-1"
+  description: "Artifactory application"
+  minimum_rancher_version: v0.46.0
+  questions:
+    - variable: "enable_artifactory_ha"
+      label: "Enable HA:"
+      description: "Enable HA for Artifactory"
+      default: "true"
+      required: true
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "use_dns_name_check"
+      label: "Artifactory DNS:"
+      description: "Using DNS Hostname for Artifactory"
+      default: "true"
+      required: true
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "dns_name_value"
+      label: "Artifactory hostname:"
+      description: "Artifactory DNS Hostname"
+      default: "artifactory.example.com"
+      required: true
+      type: "string"
+    - variable: "domain_to_register_dns"
+      label: "Domain to register:"
+      description: "Domain to register"
+      default: "example.com"
+      required: true
+      type: "string"
+    - variable: "db_username"
+      label: "Postgres DB Username:"
+      description: "Postgres DB Username"
+      required: true
+      default: "artifactory"
+      type: "string"
+    - variable: "db_password"
+      label: "Postgres DB Password:"
+      description: "Postgres DB Password"
+      required: true     
+      type: "password"
+    - variable: "volumedriver"
+      description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+      label: "Volume Driver:"
+      required: true
+      default: local
+      type: "enum"
+      options:
+        - local
+        - rancher-nfs
+

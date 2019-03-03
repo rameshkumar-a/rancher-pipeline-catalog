@@ -1,0 +1,59 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#       ____              ____            __
+#      / __ \__  ______  / __ \___  _____/ /__
+#     / /_/ / / / / __ \/ / / / _ \/ ___/ //_/
+#    / _, _/ /_/ / / / / /_/ /  __/ /__/ ,<
+#   /_/ |_|\__,_/_/ /_/_____/\___/\___/_/|_|
+#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+version: '2'
+
+volumes:
+  mysql-data:
+    driver: ${volumedriver}
+  rundeck-var-rundeck-projects:
+    driver: ${volumedriver}
+  rundeck-var-lib-keys:
+    driver: ${volumedriver}
+  rundeck-var-logs-rundeck:
+    driver: ${volumedriver}
+  rundeck-etc-rundeck:
+    driver: ${volumedriver}
+
+services:
+  rundeckmysql:
+    restart: always
+    image: mysql:5.7
+    environment:
+       MYSQL_DATABASE: rundeck
+       MYSQL_USER: ${mysql_username}
+       MYSQL_PASSWORD: ${mysql_password}
+       MYSQL_ROOT_PASSWORD: ${mysql_password}
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  rundeck:
+    depends_on:
+      - rundeckmysql
+    restart: always
+    image: jordan/rundeck:3.0.13
+    links:
+      - rundeckmysql
+    environment:
+       DATABASE_URL: "jdbc:mysql://rundeckmysql/rundeck?autoReconnect=true"
+       RUNDECK_PASSWORD: ${mysql_password}
+       RUNDECK_ADMIN_PASSWORD: ${mysql_password}
+       EXTERNAL_SERVER_URL: "${rundeck_protocol}://${rundeck_subdomain}"
+       NO_LOCAL_MYSQL: 'true'
+    volumes:
+      - rundeck-var-rundeck-projects:/var/rundeck/projects:rw
+      - rundeck-var-lib-keys:/var/lib/rundeck_ssh:ro
+      - rundeck-var-logs-rundeck:/var/log/rundeck:rw
+      - rundeck-etc-rundeck:/etc/rundeck:rw
+    labels:
+      - "traefik.enable=stack"
+      - "traefik.domain=${service_tld}"
+      - "traefik.port=4440"
+      - "traefik.alias.fqdn=${rundeck_subdomain}.${service_tld}"
+      - "rundeck"

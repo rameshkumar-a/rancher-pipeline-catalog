@@ -1,0 +1,130 @@
+version: '2'
+.catalog:
+  name: Sonarqube
+  version: 7.1.1-5
+  description: |
+    SonarQube is an open source platform for continuous inspection of code quality.
+  questions:
+  - variable: "postgres_database_host"
+    description: "SonarQube Database Host"
+    label: "Postgres Database"
+    type: "string"
+    required: true
+    default: "postgresql"
+  - variable: "postgres_database_name"
+    description: "SonarQube Database Name"
+    label: "Postgres Database"
+    type: "string"
+    required: true
+    default: "sonar"
+  - variable: "postgres_username"
+    description: "Sonarqube database login"
+    label: "Postgres Username"
+    type: "string"
+    required: true
+    default: "sonarqube"
+  - variable: "postgres_password"
+    description: "Sonarqube database password"
+    label: "Postgres Password"
+    type: "password"
+    required: true
+  - variable: "sonarqube_admin_password"
+    description: "Sonarqube admin user password"
+    label: "Sonarqube admin password"
+    type: "password"
+    required: true
+  - variable: "service_url_prefix"
+    label: "Service URL Prefix:"
+    description: |
+      Service URL prefix
+    default: 'https://'
+    required: true
+    type: "enum"
+    options:
+      - 'http://'
+      - 'https://'
+  - variable: "sonarqube_subdomain"
+    label: "Sonarqube Subdomain:"
+    description: "Sonarqube DNS Subdomain"
+    default: "sonarqube"
+    required: true
+    type: "string"
+  - variable: "service_tld"
+    label: "Service TLD:"
+    description: "Domain to register"
+    default: "example.com"
+    required: true
+    type: "string"
+  - variable: "volumedriver"
+    description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+    label: "Volume Driver:"
+    required: true
+    default: local
+    type: "enum"
+    options:
+      - local
+      - rancher-nfs
+  - variable: "plugins"
+    type: "multiline"
+    label: "List of Plugins"
+    description: |
+        List of plugins in the format <plugin_name>[:<version>]
+        one entry per line.
+    default: |
+      https://github.com/SonarQubeCommunity/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar  https://github.com/gabrie-allaigre/sonar-auth-gitlab-plugin/releases/download/1.3.2/sonar-auth-gitlab-plugin-1.3.2.jar  http://central.maven.org/maven2/org/sonarsource/java/sonar-java-plugin/5.5.0.14655/sonar-java-plugin-5.5.0.14655.jar  http://central.maven.org/maven2/org/sonarsource/javascript/sonar-javascript-plugin/4.2.0.6476/sonar-javascript-plugin-4.2.0.6476.jar  http://central.maven.org/maven2/org/sonarsource/scm/git/sonar-scm-git-plugin/1.4.1.1128/sonar-scm-git-plugin-1.4.1.1128.jar  http://central.maven.org/maven2/org/sonarsource/scm/svn/sonar-scm-svn-plugin/1.8.0.1168/sonar-scm-svn-plugin-1.8.0.1168.jar   http://central.maven.org/maven2/org/sonarsource/xml/sonar-xml-plugin/1.5.1.1452/sonar-xml-plugin-1.5.1.1452.jar  https://github.com/felipebz/sonar-plsql/releases/download/2.2.0/sonar-plsql-open-plugin-2.2.0.jar
+  - variable: "set_gitlab_oauth_config"
+    label: "Set up GitLab OAuth configuration:"
+    description: "Set up GitLab OAuth configuration in Sonarqube"
+    default: "true"
+    required: true
+    type: "enum"
+    options:
+      - "true"
+      - "false"
+  - variable: "gitlab_hostname"
+    label: "GitLab URL:"
+    description: "GitLab URL which provides OAuth support"
+    default: "https://gitlab.example.com"
+    required: false
+    type: "string"
+  - variable: "gitlab_oauth_app_id"
+    label: "GitLab oAuth App ID:"
+    description: "Application ID provided by GitLab"
+    required: false
+    type: "string"
+  - variable: "gitlab_oauth_app_secret"
+    label: "GitLab oAuth App Secret:"
+    description: "Application Secret provided by GitLab"
+    required: false
+    type: "password"
+services:
+  sonarqube-plugin:
+    scale: 1
+    start_on_create: true
+  postgresql:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 5432
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+  sonarqube-authentication-setup:
+    scale: 1
+    start_on_create: true
+  sonarqube:
+    scale: 1
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 9000
+      unhealthy_threshold: 3
+      initializing_timeout: 2000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 2000

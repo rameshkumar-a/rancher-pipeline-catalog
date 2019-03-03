@@ -1,0 +1,15 @@
+version: '2'
+volumes:
+services:
+ client:
+    restart: always
+    image: rameshkumara/sensu-client:0.16
+    command: client
+    container_name: client
+    stdin_open: true 
+    external_links:
+      - ${redis_link}:redis
+    environment:
+      CLIENT_NAME: ${AGENT_NAME}
+      CLIENT_SUBSCRIPTIONS: ${SUBSCRIPTIONS_LIST}
+      CLIENT_ADDRESS: ${AGENT_ADDRESS}

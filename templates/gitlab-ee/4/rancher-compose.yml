@@ -1,0 +1,292 @@
+version: '2'
+catalog:
+  name: Gitlab Community
+  version: gitlab-11.0.4-ee.0-2
+  description: |
+    GitLab Enterprise Edition docker image based on the Omnibus package
+  minimum_rancher_version: v0.56.0
+  maintainer: "Ericsson, Inc"
+  uuid: gitlab-ee-2
+  questions:
+    - variable: "gitlab_hostname"
+      description: "Gitlab hostname (without uri scheme http:// or https://)"
+      label: "Gitlab hostname:"
+      required: true
+      default: "git.example.com"
+      type: "string"
+    - variable: "volumedriver"
+      description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+      label: "Volume Driver:"
+      required: true
+      default: local
+      type: "enum"
+      options:
+        - local
+        - rancher-nfs
+    - variable: "gitlab_root_password"
+      description: "Gitlab root password"
+      label: "Root password:"
+      required: false
+      default: "changeme"
+      type: "password"
+    - variable: "gitlab_omnibus_prefix"
+      label: "Gitlab external_url prefix:"
+      description: |
+        This is needed for the docker-compose file to set the correct external_url
+      default: 'http://'
+      required: true
+      type: "enum"
+      options:
+        - 'http://'
+        - 'https://'
+    - variable: "http_port"
+      description: "HTTP port to expose on host. Will be used to bind TCP"
+      label: "HTTP port:"
+      required: true
+      default: 80
+      type: "int"
+    - variable: "https_port"
+      description: "HTTPS port to expose on host. Will be used to bind TCP"
+      label: "HTTPS port:"
+      required: true
+      default: 443
+      type: "int"
+    - variable: "ssh_port"
+      description: "SSH port to expose on host. Will be used to bind TCP"
+      label: "SSH port:"
+      required: true
+      default: 222
+      type: "int"
+    - variable: "plantuml_enabled"
+      description: "Enable or disable the plant uml configuration"
+      label: "PlantUML enabled:"
+      required: false
+      default: true
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "plantuml_port"
+      description: "Set the port in which plantuml will be exposed"
+      label: "PlantUML port:"
+      required: true
+      default: 8080
+      type: "int"
+    - variable: "use_dns_name_check"
+      label: "Gitlab DNS:"
+      description: "Using DNS Hostname for Gitlab"
+      default: false
+      required: false
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "domain_to_register_dns"
+      label: "Domain to register:"
+      description: "Domain to register"
+      default: "example.com"
+      required: false
+    - variable: "enable_gitlab_pages_check"
+      label: "Enable Gitlab Pages:"
+      description: "Enable GitLab pages"
+      default: "true"
+      required: true
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "protocol_to_host_gitlab_pages"
+      label: "Gitlab Pages URL prefix:"
+      description: |
+        GitLab Pages URL prefix
+      default: 'http://'
+      required: true
+      type: "enum"
+      options:
+        - 'http://'
+        - 'https://'
+    - variable: "domain_to_host_gitlab_pages"
+      label: "Domain to host GitLab Pages:"
+      description: "Domain to host GitLab Pages"
+      default: "gitpages.example.com"
+      required: true
+    - variable: "gitpages_port"
+      description: "Port to expose GitLab Pages on host. Will be used to bind TCP"
+      label: "GitLab Pages port:"
+      required: true
+      default: 8090
+      type: "int"
+    - variable: "azure_auth_enabled"
+      label: "Azure Auth Enabled:"
+      description: "Enable Azure Active directory authentication"
+      default: "true"
+      required: false
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "azure_auth_client_id"
+      description: "Azure auth client ID"
+      label: "Azure Auth Client ID:"
+      required: false
+      type: "string"
+    - variable: "azure_auth_client_secret"
+      description: "Azure auth client secret"
+      label: "Azure Auth Client Secret:"
+      required: false
+      type: "string"
+    - variable: "azure_auth_tenant_id"
+      description: "Azure auth tenant id"
+      label: "Azure Auth Tenant ID:"
+      required: false
+      type: "string"
+    - variable: "gitlab_email_enabled"
+      description: "gitlab email enabled"
+      label: "SendGrid Email Enabled:"
+      required: false
+      default: true
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "email_from"
+      description: "Sender mail id"
+      label: "SendGrid Email From:"
+      required: false
+      type: "string"
+    - variable: "email_display_name"
+      description: "Email subject"
+      label: "SendGrid Email Subject:"
+      required: false
+      default: "DevOps"
+      type: "string"
+    - variable: "email_reply_to"
+      description: "Reciever mail id"
+      label: "SendGrid Email To:"
+      required: false
+      type: "string"
+    - variable: "smtp_enable"
+      description: "Smtp Enable"
+      label: "SMTP Enable:"
+      required: false
+      default: true
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "smtp_address"
+      description: "smpt address"
+      label: "SMTP address:"
+      required: false
+      default: "smtp.sendgrid.net"
+      type: "string"
+    - variable: "smtp_port"
+      description: "smpt port"
+      label: "SMTP Port:"
+      required: false
+      default: 587
+      type: "int"
+    - variable: "smtp_user_name"
+      description: "smpt user name"
+      label: "SMTP User Name:"
+      required: false
+      type: "string"
+    - variable: "smtp_password"
+      description: "smpt password"
+      label: "SMTP Password:"
+      required: false
+      type: "string"
+    - variable: "smtp_domain"
+      description: "smpt domain"
+      label: "SMTP Domain:"
+      required: false
+      default: "smtp.sendgrid.net"
+      type: "string"
+    - variable: "smtp_authentication"
+      description: "smpt authentication"
+      label: "SMTP Authentication:"
+      required: false
+      default: "login"
+      type: "string"
+    - variable: "enable_starttls_auto"
+      description: "smpt start tls auto"
+      label: "SMTP Start Tls Auto:"
+      required: false
+      default: true
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "smtp_tls"
+      description: "smpt tls"
+      label: "SMTP Tls:"
+      required: false
+      default: false
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "client_max_body_size"
+      description: "Client Max Body Size"
+      label: "Client Max Body Size:"
+      required: false
+      default: 250M
+      type: "string"
+    - variable: "nginx_listen_port"
+      description: "Nginx Listen Port"
+      label: "Nginx Listen Port:"
+      required: false
+      default: 80
+      type: "int"
+    - variable: "nginx_listen_https"
+      description: "Nginx Listen Https"
+      label: "Nginx Listen Https:"
+      required: false
+      default: false
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "nginx_redirect_http_to_https"
+      description: "Nginx Redirect Http To Https"
+      label: "Nginx Redirect Http To Https:"
+      required: false
+      default: false
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "encrypt"
+      description: "encrypt the mail"
+      label: "Encryption:"
+      required: false
+      default: false
+      type: "enum"
+      options:
+        - true
+        - false
+    - variable: "enable_mattermost_check"
+      description: "Enable MatterMost"
+      label: "Enable MatterMost:"
+      required: true
+      default: true
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "protcol_to_host_mattermost"
+      label: "MatterMost URL Prefix:"
+      description: |
+         Mattermost URL Prefix
+      default: 'http://'
+      required: true
+      type: "enum"
+      options:
+        - 'http://'
+        - 'https://'
+    - variable: "domain_to_host_mattermost"
+      description: "Domain to host Mattermost (without uri scheme http:// or https://)"
+      label: "Domain to host MatterMost:"
+      required: true
+      default: "mattermost.example.com"
+      type: "string"

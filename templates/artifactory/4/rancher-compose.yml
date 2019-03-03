@@ -1,0 +1,64 @@
+version: '2'
+services:
+  artifactory:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 8081
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+  postgresql:
+    scale: 1
+    start_on_create: true
+.catalog:
+  name: "JFrog Artifactory"
+  version: "artifactory-6.8.2"
+  description: "Artifactory application"
+  minimum_rancher_version: v0.46.0
+  questions:
+    - variable: "enable_artifactory_ha"
+      label: "Enable HA:"
+      description: "Enable HA for Artifactory"
+      default: "false"
+      required: true
+      type: "enum"
+      options:
+        - "true"
+        - "false"
+    - variable: "artifactory_subdomain"
+      label: "Artifactory Subdomain:"
+      description: "Artifactory DNS Hostname"
+      default: "artifactory"
+      required: true
+      type: "string"
+    - variable: "service_tld"
+      label: "Service TLD:"
+      description: "Domain to register"
+      default: "example.com"
+      required: true
+      type: "string"
+    - variable: "postgres_username"
+      label: "Postgres DB Username:"
+      description: "Postgres DB Username"
+      required: true
+      default: "artifactory"
+      type: "string"
+    - variable: "postgres_password"
+      label: "Postgres DB Password:"
+      description: "Postgres DB Password"
+      required: true
+      type: "password"
+    - variable: "volumedriver"
+      description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+      label: "Volume Driver:"
+      required: true
+      default: local
+      type: "enum"
+      options:
+        - local
+        - rancher-nfs

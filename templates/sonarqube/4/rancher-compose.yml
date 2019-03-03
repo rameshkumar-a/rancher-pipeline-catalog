@@ -1,0 +1,93 @@
+.catalog:
+  name: Sonarqube
+  version: 7.1.1-4
+  description: |
+    SonarQube is an open source platform for continuous inspection of code quality.
+  questions:
+  - variable: "sonarqube_db_name"
+    description: "Sonarqube database Name"
+    label: "Sonarqube database Name"
+    type: "string"
+    required: true
+    default: "sonarqube"
+  - variable: "sonarqube_db_login"
+    description: "Sonarqube database login"
+    label: "Database login"
+    type: "string"
+    required: true
+    default: "sonarqube"
+  - variable: "sonarqube_db_password"
+    description: "Sonarqube database password"
+    label: "Database password"
+    type: "password"
+    required: true
+  - variable: "sonarqube_admin_password"
+    description: "Sonarqube admin user password"
+    label: "Sonarqube admin user password"
+    type: "password"
+    required: true
+  - variable: "use_dns_name_check"
+    label: "Sonarqube DNS:"
+    description: "Using DNS Hostname for Sonarqube"
+    default: "true"
+    required: true
+    type: "enum"
+    options:
+      - "true"
+      - "false"
+  - variable: "dns_name_value"
+    label: "Sonarqube hostname:"
+    description: "Sonarqube DNS Hostname"
+    default: "sonarqube.example.com"
+    required: true
+    type: "string"
+  - variable: "domain_to_register_dns"
+    label: "Domain to register:"
+    description: "Domain to register"
+    default: "example.com"
+    required: true
+    type: "string"
+  - variable: "volumedriver"
+    description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+    label: "Volume Driver:"
+    required: true
+    default: local
+    type: "enum"
+    options:
+      - local
+      - rancher-nfs
+  - variable: "plugins"
+    type: "multiline"
+    label: "List of Plugins"
+    description: |
+        List of plugins in the format <plugin_name>[:<version>]
+        one entry per line.
+    default: |
+      https://github.com/SonarQubeCommunity/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar  https://github.com/gabrie-allaigre/sonar-auth-gitlab-plugin/releases/download/1.3.2/sonar-auth-gitlab-plugin-1.3.2.jar  http://central.maven.org/maven2/org/sonarsource/java/sonar-java-plugin/5.5.0.14655/sonar-java-plugin-5.5.0.14655.jar  http://central.maven.org/maven2/org/sonarsource/javascript/sonar-javascript-plugin/4.2.0.6476/sonar-javascript-plugin-4.2.0.6476.jar  http://central.maven.org/maven2/org/sonarsource/scm/git/sonar-scm-git-plugin/1.4.1.1128/sonar-scm-git-plugin-1.4.1.1128.jar  http://central.maven.org/maven2/org/sonarsource/scm/svn/sonar-scm-svn-plugin/1.8.0.1168/sonar-scm-svn-plugin-1.8.0.1168.jar   http://central.maven.org/maven2/org/sonarsource/xml/sonar-xml-plugin/1.5.1.1452/sonar-xml-plugin-1.5.1.1452.jar
+  - variable: "set_gitlab_oauth_config"
+    label: "Set up GitLab OAuth configuration:"
+    description: "Set up GitLab OAuth configuration in Sonarqube"
+    default: "true"
+    required: true
+    type: "enum"
+    options:
+      - "true"
+      - "false" 
+  - variable: "sonarqube_gitlab_hostname"
+    label: "GitLab hostname:"
+    description: "GitLab hostname which provides OAuth support"
+    default: "gitlab.com"
+    required: false
+    type: "string"  
+  - variable: "sonarqube_gitlab_oauth_app_id"
+    label: "Application ID:"
+    description: "Application ID provided by GitLab"
+    required: false
+    type: "string"   
+  - variable: "sonarqube_gitlab_oauth_app_secret"
+    label: "Application Secret:"
+    description: "Application Secret provided by GitLab"
+    required: false
+    type: "password"       
+sonarqube:
+  scale: 1

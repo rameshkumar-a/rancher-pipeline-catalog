@@ -1,0 +1,88 @@
+version: '2'
+services:
+  elasticsearch:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 9200
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+  logstash-1:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 5044
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+  logstash-2:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 5044
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+  kibana:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 5601
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      reinitializing_timeout: 60000
+.catalog:
+  name: "ELK Stack"
+  version: "6.5.0-0"
+  description: "ElasticSearch, LogStash and Kibana"
+  questions:
+  - variable: "configuration_repo_path"
+    label: "Configuration Repo Path"
+    description: "Configuration Repo Path"
+    default: "https://gitlab.dynamictivity.com/rosetta/elk-conf-repo"
+    required: true
+    type: "string"
+  - variable: "volumedriver"
+    description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+    label: "Volume Driver:"
+    required: true
+    default: local
+    type: "enum"
+    options:
+      - local
+      - rancher-nfs
+  - variable: "kibana_subdomain"
+    label: "Kibana Subdomain"
+    description: "Kibna Hostname"
+    default: "kibana"
+    required: true
+    type: "string"
+  - variable: "logstash_subdomain"
+    label: "Logstash Subdomain"
+    description: "Logstash Hostname"
+    default: "logstash"
+    required: true
+    type: "string"
+  - variable: "service_tld"
+    label: "Service TLD:"
+    description: "Domain to register (i.e. example.com)"
+    default: "example.com"
+    required: true
+    type: "string"

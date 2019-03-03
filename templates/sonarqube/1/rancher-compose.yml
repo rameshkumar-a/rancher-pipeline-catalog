@@ -1,0 +1,50 @@
+.catalog:
+  name: Sonarqube
+  version: 7.1
+  description: |
+    SonarQube is an open source platform for continuous inspection of code quality.
+  questions:
+  - variable: "sonarqube_db_login"
+    description: "Sonarqube database login"
+    label: "Database login"
+    type: "string"
+    required: true
+    default: "sonarqube"
+  - variable: "sonarqube_db_password"
+    description: "Sonarqube database password"
+    label: "Database password"
+    type: "password"
+    required: true
+    default: "sonarqube_password"
+  - variable: "sonarqube_port"
+    description: "Sonarqube port"
+    label: "Sonarqube port"
+    type: "string"
+    required: true
+    default: "80"
+  - variable: "postgres_link"
+    description: |
+      stack/service link or external service link to postgres.
+    label: "Postgres stack/service"
+    default: "postgresql/postgresql-master"
+    required: true
+    type: "service"
+  - variable: "volumedriver"
+    description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+    label: "Volume Driver:"
+    required: true
+    default: local
+    type: "enum"
+    options:
+      - local
+      - rancher-nfs
+  - variable: "plugins"
+    type: "multiline"
+    label: "List of Plugins"
+    description: |
+        List of plugins in the format <plugin_name>[:<version>]
+        one entry per line.
+    default: |
+      https://github.com/SonarQubeCommunity/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar   http://central.maven.org/maven2/org/sonarsource/java/sonar-java-plugin/5.5.0.14655/sonar-java-plugin-5.5.0.14655.jar  http://central.maven.org/maven2/org/sonarsource/javascript/sonar-javascript-plugin/4.2.0.6476/sonar-javascript-plugin-4.2.0.6476.jar  http://central.maven.org/maven2/org/sonarsource/scm/git/sonar-scm-git-plugin/1.4.1.1128/sonar-scm-git-plugin-1.4.1.1128.jar  http://central.maven.org/maven2/org/sonarsource/scm/svn/sonar-scm-svn-plugin/1.8.0.1168/sonar-scm-svn-plugin-1.8.0.1168.jar  http://central.maven.org/maven2/org/sonarsource/typescript/sonar-typescript-plugin/1.7.0.2893/sonar-typescript-plugin-1.7.0.2893.jar  http://central.maven.org/maven2/org/sonarsource/xml/sonar-xml-plugin/1.5.1.1452/sonar-xml-plugin-1.5.1.1452.jar     
+sonarqube:
+  scale: 1

@@ -1,0 +1,27 @@
+version: '2'
+.catalog:
+  name: "Logging Stack"
+  version: "6.5.0-0"
+  description: "ElasticSearch, LogStash and Kibana"
+  questions:
+  - variable: "gitlab_config_path"
+    label: "Configuration Repo Path" 
+    description: "Configuration Repo Path" 
+    default: "https://gitlab.dynamictivity.com/rosetta/elk-conf-repo"
+    required: true
+    type: "string"
+  - variable: "domain_name"
+    label: "Service TLD"
+    description: "Domain to Register"
+    default: "example.com"
+    required: true
+    type: "string"
+  - variable: "volumedriver"
+    description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+    label: "Volume Driver:"
+    required: true
+    default: local
+    type: "enum"
+    options:
+      - local
+      - rancher-nfs    

@@ -1,0 +1,34 @@
+version: '2'
+catalog:
+  name: DrawIO
+  version: 10.2.5
+  description: |
+    Draw.io is a web based diagramming and flowcharting application, like Visio.
+  minimum_rancher_version: v0.59.0
+  uuid: drawio-0
+  questions:
+  - variable: "drawio_subdomain"
+    label: "DrawIO Subdomain:"
+    description: "DrawIO DNS Hostname"
+    default: "drawio"
+    required: true
+    type: "string"
+  - variable: "service_tld"
+    label: "Service TLD:"
+    description: "Domain to register (i.e. example.com)"
+    default: "example.com"
+    required: true
+    type: "string"
+services:
+  drawio:
+    scale: 1
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 8080
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 3000
+      strategy: recreate
+      reinitializing_timeout: 60000

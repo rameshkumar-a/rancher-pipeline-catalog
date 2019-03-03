@@ -1,0 +1,104 @@
+version: '2'
+.catalog:
+  name: "Monitoring App "
+  version: "Monitoring-1.0"
+  description: "Sensu ,influxdb ,grafana application"
+  questions:
+  - variable: "influxdb_admin_pass"
+    label: "InfluxDB Admin Password:"
+    description: "InfluxDB Admin Password"
+    required: true
+    type: "password"
+  - variable: "influxdb_db_pass"
+    label: "InfluxDB Metric DB Password:"
+    description: "InfluxDB Metric Database Password"
+    required: true
+    type: "password"
+  - variable: "MATTERMOST_USER_NAME"
+    label: "MatterMost User Name:"
+    description: "MatterMost User Name , used in mattermost handler"
+    required: true
+    type: "string"
+  - variable: "MATTERMOST_URL"
+    label: "Mattermost Hook URL :"
+    description: "Mattermost Hook URL used in mattermost handler"
+    default: "https://mattermost.example.com/hooks/xxxxxxxxxxxx"
+    required: true
+    type: "multiline"
+  - variable: "grafana_datasource_path"
+    label: "Grafana Datasource Location:"
+    description: "Location of Grafana Datasource yaml"
+    default: "https://raw.githubusercontent.com/rameshkumar-a/grafana-data/master/datasource/datasource.yaml"
+    required: true
+    type: "multiline"
+  - variable: "grafana_dashboard_path"
+    label: "Grafana Dashboard Location:"
+    description: "Location of Grafana Dashboard yaml"
+    default: "https://raw.githubusercontent.com/rameshkumar-a/grafana-data/master/dashboard/dashboard.yaml"
+    required: true
+    type: "multiline"
+  - variable: "grafana_dashboard_json"
+    label: "List of Grafana Dashboards Location :"
+    description: "List of location of Grafana Dashboard JSON"
+    default: "https://raw.githubusercontent.com/rameshkumar-a/grafana-data/master/dashboard/grafana-config.json"
+    required: true
+  - variable: "use_dns_name_check"
+    label: "Sensu DNS:"
+    description: "Using DNS Hostname for Sensu"
+    default: "true"
+    required: true
+    type: "enum"
+    options:
+      - "true"
+      - "false"
+  - variable: "domain_to_register_dns"
+    label: "Domain to register:"
+    description: "Domain to register"
+    default: "example.com"
+    required: true
+    type: "string"
+  - variable: "uchiwa_dns_name_value"
+    label: "Uchiwa Dashboard:"
+    description: "Uchiwa Dashboard URL"
+    default: "uchiwa.example.com"
+    required: true
+    type: "string"
+  - variable: "grafana_dns_name_value"
+    label: "Grafana hostname:"
+    description: "Grafana DNS Hostname"
+    default: "grafana.example.com"
+    required: true
+    type: "string"
+  - variable: "influxdb_dns_name_value"
+    label: "influxdb hostname:"
+    description: "influxdb DNS Hostname"
+    default: "influxdb.example.com"
+    required: true
+    type: "string"
+  - variable: "HOST_URL"
+    label: " Host URL Need to monitor for Avilability Check:"
+    description: "Host need to be monitored"
+    default: "https://sonarqube.example.com"
+    required: true
+    type: "string"
+  - variable: "CHECK_NAME"
+    label: " Check Name:"
+    description: "Check Name for Site"
+    default: "SonarQube_check"
+    required: true
+    type: "string"
+  - variable: "DATA_CENTER_NAME"
+    label: "Data Center Name:"
+    description: "Data Center Name"
+    default: "Demo-DC"
+    required: true
+    type: "string"
+  - variable: "volumedriver"
+    description: "Choose the Volume Driver being used.(Option: local or rancher-nfs)"
+    label: "Volume Driver:"
+    required: true
+    default: local
+    type: "enum"
+    options:
+      - local
+      - rancher-nfs

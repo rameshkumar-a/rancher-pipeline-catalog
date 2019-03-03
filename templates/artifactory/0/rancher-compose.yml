@@ -1,0 +1,13 @@
+version: '2'
+.catalog:
+  name: "Artifactory application"
+  version: "1.0-rancher1"
+  description: "Artifactory application description .... ... .."
+  minimum_rancher_version: v0.46.0
+  #questions:
+  #  - variable: "guacamole_db"
+  #    label: "MySQL Database Name"
+  #    description: "Your MYSQL guacamole database name"
+  #    default: "guacamole_db"
+  #    required: true
+  #    type: "string"

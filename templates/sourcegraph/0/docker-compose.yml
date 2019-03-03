@@ -1,0 +1,61 @@
+version: '2'
+volumes:
+  sourcegraph-conf:
+    external: true
+    driver: rancher-nfs
+  sourcegraph-data:
+    external: true
+    driver: rancher-nfs
+services:
+  python:
+    image: sourcegraph/codeintel-python
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+  java:
+    image: sourcegraph/codeintel-java
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+  sourcegraph:
+    image: sourcegraph/server:2.9.3
+    stdin_open: true
+    volumes:
+    - sourcegraph-conf:/etc/sourcegraph
+    - sourcegraph-data:/var/opt/sourcegraph
+    tty: true
+    links:
+    - php:php
+    - python:python
+    - go:go
+    - typescript:typescript
+    - java:java
+    labels:
+      traefik.port: '7080'
+      traefik.enable: stack
+      traefik.domain: example.com
+      io.rancher.container.pull_image: always
+  go:
+    image: sourcegraph/codeintel-go
+    environment:
+      SRC_GIT_SERVERS: sourcegraph:3178
+    stdin_open: true
+    tty: true
+    links:
+    - sourcegraph:sourcegraph
+    labels:
+      io.rancher.container.pull_image: always
+  php:
+    image: sourcegraph/codeintel-php
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+  typescript:
+    image: sourcegraph/codeintel-typescript
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always

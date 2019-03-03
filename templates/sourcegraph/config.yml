@@ -1,0 +1,5 @@
+name: Sourcegraph
+description: |
+  Sourcegraph is an open source platform for code search and intelligence.
+version: 3.1.1
+category: Applications

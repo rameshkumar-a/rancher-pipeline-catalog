@@ -149,8 +149,8 @@ services:
       GF_SERVER_ROOT_URL: https://${grafana_subdomain}.${service_tld}
       GF_AUTH_GITLAB_ENABLED: true
       GF_AUTH_GITLAB_ALLOW_SIGN_UP: true
-      GF_AUTH_GITLAB_CLIENT_ID: 19526f84da9ead90fe67e5a9e16a8c55ab46244136029bd98d8a55bd5919e2aa
-      GF_AUTH_GITLAB_CLIENT_SECRET: fa044821ef34a91bd970b485495f0b9c6e53c324aa83aff055a109e9cc453163
+      GF_AUTH_GITLAB_CLIENT_ID: ${gf_auth_gitlab_client_id}
+      GF_AUTH_GITLAB_CLIENT_SECRET: ${gf_auth_gitlab_client_secret}
       GF_AUTH_GITLAB_SCOPES: read_user
       GF_AUTH_GITLAB_AUTH_URL: ${grafana_git_lab_url}/oauth/authorize
       GF_AUTH_GITLAB_TOKEN_URL: ${grafana_git_lab_url}/oauth/token

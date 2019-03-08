@@ -1,7 +1,7 @@
 name: Monitoring  Agent
 description: |
   Sensu Monitoring  Agent app
-version: Monitoring-Agent-2.0.1
+version: Monitoring-Agent-2.0.2
 category: Applications
 maintainer: "Ericsson, Inc"
 projectURL: https://sensu.io/

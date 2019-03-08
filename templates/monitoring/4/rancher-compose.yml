@@ -1,7 +1,7 @@
 version: '2'
 .catalog:
   name: "Monitoring App "
-  version: "Monitoring-1.3"
+  version: "Monitoring-1.4"
   description: "Sensu ,influxdb ,grafana application"
   questions:
   - variable: "configuration_repo_path"
@@ -9,7 +9,7 @@ version: '2'
     description: "Path to repo which contains monitoring configs"
     required: true
     type: "string"
-    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config"
+    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master"
   - variable: "influxdb_admin_password"
     label: "InfluxDB Admin Password:"
     description: "InfluxDB Admin Password"
@@ -20,6 +20,12 @@ version: '2'
     description: "InfluxDB Metric Database Password"
     required: true
     type: "password"
+  - variable: "influxdb_continuous_query"
+    label: "Continuous query for Grafana dashboard:"
+    description: "Continuous query used to crunch the influxDB Metrics Data"
+    default: "https://gitlab.rosetta.ericssondevops.com/sanskrit/monitoring-conf-repo/raw/monitor_config_2_0/influxdb/continuous_query.txt"
+    required: true
+    type: "multiline"    
   - variable: "mattermost_username"
     label: "MatterMost User Name:"
     description: "MatterMost User Name , used in mattermost handler"
@@ -28,26 +34,25 @@ version: '2'
   - variable: "mattermost_url"
     label: "Mattermost Hook URL :"
     description: "Mattermost Hook URL used in mattermost handler"
-    default: "https://mattermost.example.com/hooks/xxxxxxxxxxxx"
+    default: "https://mattermost.rosetta.ericssondevops.com/hooks/1e6s3xcbh7np7f3hhs9yftq8ty"
     required: true
     type: "multiline"
   - variable: "grafana_datasource_path"
     label: "Grafana Datasource Location:"
     description: "Location of Grafana Datasource yaml"
-    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/datasource/datasource.yaml"
+    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/datasource/datasource.yaml"
     required: true
     type: "multiline"
   - variable: "grafana_dashboard_path"
     label: "Grafana Dashboard Location:"
     description: "Location of Grafana Dashboard yaml"
-    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/dashboard.yaml"
+    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/dashboard.yaml"
     required: true
     type: "multiline"
   - variable: "grafana_dashboard_json"
     label: "List of Grafana Dashboards Location :"
     description: "List of location of Grafana Dashboard JSON"
-    default: "https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/host-metrics-dashboard.json https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/ops-gitlab-dashboard.json
-    https://gitlab.dynamictivity.com/rosetta/monitoring-conf-repo/raw/moinitoring_2_0_config/dashboard/ops-traefik.json"
+    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/host-metrics-dashboard.json https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/ops-gitlab-dashboard.json https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/ops-traefik.json https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/ops-dashboard.json"
     required: true
     type: "multiline" 
   - variable: "grafana_git_lab_url"
@@ -57,13 +62,13 @@ version: '2'
     required: true
     type: "string"   
   - variable: "gf_auth_gitlab_client_id"
-    label: "Gitlab clinet id :"
+    label: "Gitlab Client id :"
     description: "Grafana URL"
     default: "XXXXXXXXXXXXXXXXXX"
     required: true
     type: "string" 
   - variable: "gf_auth_gitlab_client_secret"
-    label: "Gitlab Clinet Secret :"
+    label: "Gitlab Client Secret :"
     description: "Grafana URL"
     default: "XXXXXXXXXXXXXXXXXX"
     required: true
@@ -80,7 +85,7 @@ version: '2'
   - variable: "service_tld"
     label: "Service TLD:"
     description: "Domain to register"
-    default: "example.com"
+    default: "euyzzd.ericssoncicd.com"
     required: true
     type: "string"
   - variable: "uchiwa_subdomain"
@@ -104,7 +109,7 @@ version: '2'
   - variable: "default_check_url"
     label: "Default Check URL:"
     description: "Host need to be monitored"
-    default: "sonarqube.example.com"
+    default: "sonarqube.sandbox.ericssondevops.com"
     required: true
     type: "string"
   - variable: "default_check_name"

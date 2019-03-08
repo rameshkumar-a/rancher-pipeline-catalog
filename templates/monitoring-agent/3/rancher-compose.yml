@@ -1,0 +1,35 @@
+version: '2'
+.catalog:
+  name: "Monitoring Agent App"
+  version: "Monitoring-Agent-2.0.2"
+  description: "Monitoring Agent Application"
+  questions:
+  - variable: "AGENT_NAME"
+    label: "Name Of the Agent/Client :"
+    description: "Name Of the Agent/Client(space not allowed)"
+    default: "Demo-Agent"
+    required: true
+    type: "string"    
+  - variable: "SUBSCRIPTIONS_LIST"
+    label: " Subcrption list :"
+    description: "Subcrption list from sensu server"
+    default: "system,sites,app_tier"
+    required: true
+    type: "string" 
+  - variable: "DISK_WARNING"
+    label: " Disk Warning Percentage :"
+    description: "Used in Disk Alerts"
+    default: "85"
+    required: true
+    type: "int"
+  - variable: "DISK_CRITICAL"
+    label: " Disk Critical Percentage :"
+    description: "Used in Disk Alerts"
+    default: "95"
+    required: true
+    type: "int"    
+  - variable: "redis_link"
+    description: stack/service link or external service link to Redis DB from Sensu.
+    label: "Redis stack/service"
+    required: true
+    type: "service" 

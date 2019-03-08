@@ -1,0 +1,17 @@
+version: '2'
+volumes:
+services:
+ client:
+    restart: always
+    image: rameshkumara/sensu-client:0.27 
+    command: client
+    container_name: client
+    stdin_open: true 
+    external_links:
+      - ${redis_link}:redis
+    environment:
+      CLIENT_NAME: ${AGENT_NAME}
+      CLIENT_SUBSCRIPTIONS: ${SUBSCRIPTIONS_LIST}
+      CLIENT_ADDRESS: 0.0.0.0
+      DISK_WARNING : ${DISK_WARNING}
+      DISK_CRITICAL : ${DISK_CRITICAL}

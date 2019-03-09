@@ -9,7 +9,7 @@ version: '2'
     description: "Path to repo which contains monitoring configs"
     required: true
     type: "string"
-    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master"
+    default: "https://gitlab.com/devops-rosetta-stone/monitoring-conf-repo/raw/master/"
   - variable: "influxdb_admin_password"
     label: "InfluxDB Admin Password:"
     description: "InfluxDB Admin Password"
@@ -23,7 +23,7 @@ version: '2'
   - variable: "influxdb_continuous_query"
     label: "Continuous query for Grafana dashboard:"
     description: "Continuous query used to crunch the influxDB Metrics Data"
-    default: "https://gitlab.rosetta.ericssondevops.com/sanskrit/monitoring-conf-repo/raw/monitor_config_2_0/influxdb/continuous_query.txt"
+    default: "https://gitlab.com/devops-rosetta-stone/monitoring-conf-repo/raw/master/influxdb/continuous_query.txt"
     required: true
     type: "multiline"    
   - variable: "mattermost_username"
@@ -34,25 +34,25 @@ version: '2'
   - variable: "mattermost_url"
     label: "Mattermost Hook URL :"
     description: "Mattermost Hook URL used in mattermost handler"
-    default: "https://mattermost.rosetta.ericssondevops.com/hooks/1e6s3xcbh7np7f3hhs9yftq8ty"
+    default: "https://mattermost.example.com/hooks/xxxxxxxxxxxx"
     required: true
     type: "multiline"
   - variable: "grafana_datasource_path"
     label: "Grafana Datasource Location:"
     description: "Location of Grafana Datasource yaml"
-    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/datasource/datasource.yaml"
+    default: "https://gitlab.com/devops-rosetta-stone/monitoring-conf-repo/raw/master/datasource/datasource.yaml"
     required: true
     type: "multiline"
   - variable: "grafana_dashboard_path"
     label: "Grafana Dashboard Location:"
     description: "Location of Grafana Dashboard yaml"
-    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/dashboard.yaml"
+    default: "https://gitlab.com/devops-rosetta-stone/monitoring-conf-repo/raw/master/dashboard/dashboard.yaml"
     required: true
     type: "multiline"
   - variable: "grafana_dashboard_json"
     label: "List of Grafana Dashboards Location :"
     description: "List of location of Grafana Dashboard JSON"
-    default: "https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/host-metrics-dashboard.json https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/ops-gitlab-dashboard.json https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/ops-traefik.json https://raw.githubusercontent.com/rameshkumar-a/monitoring-conf-repo/master/dashboard/ops-dashboard.json"
+    default: "https://gitlab.com/devops-rosetta-stone/monitoring-conf-repo/raw/master/dashboard/ops-dashboard.json"
     required: true
     type: "multiline" 
   - variable: "grafana_git_lab_url"
@@ -85,7 +85,7 @@ version: '2'
   - variable: "service_tld"
     label: "Service TLD:"
     description: "Domain to register"
-    default: "euyzzd.ericssoncicd.com"
+    default: "example.com"
     required: true
     type: "string"
   - variable: "uchiwa_subdomain"
@@ -109,7 +109,7 @@ version: '2'
   - variable: "default_check_url"
     label: "Default Check URL:"
     description: "Host need to be monitored"
-    default: "sonarqube.sandbox.ericssondevops.com"
+    default: "sonarqube.example.com"
     required: true
     type: "string"
   - variable: "default_check_name"

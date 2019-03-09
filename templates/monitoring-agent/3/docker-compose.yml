@@ -6,7 +6,9 @@ services:
     image: rameshkumara/sensu-client:0.27 
     command: client
     container_name: client
-    stdin_open: true 
+    stdin_open: true
+    labels:
+      io.rancher.scheduler.affinity:host_label: ${host_label}
     external_links:
       - ${redis_link}:redis
     environment:

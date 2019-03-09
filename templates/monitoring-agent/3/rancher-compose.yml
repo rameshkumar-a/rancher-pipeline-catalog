@@ -16,6 +16,12 @@ version: '2'
     default: "system,sites,app_tier"
     required: true
     type: "string" 
+  - variable: "host_label"
+    description: "Host label where to run Sensu Client."
+    label: "Host label:"
+    required: true
+    default: "sensu_client=hostname" 
+    type: "string"    
   - variable: "DISK_WARNING"
     label: " Disk Warning Percentage :"
     description: "Used in Disk Alerts"

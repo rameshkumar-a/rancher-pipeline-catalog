@@ -9,7 +9,7 @@ version: '2'
     description: "Path to repo which contains monitoring configs"
     required: true
     type: "string"
-    default: "https://gitlab.com/devops-rosetta-stone/monitoring-conf-repo/raw/master/"
+    default: "https://gitlab.com/devops-rosetta-stone/monitoring-conf-repo/raw/master"
   - variable: "influxdb_admin_password"
     label: "InfluxDB Admin Password:"
     description: "InfluxDB Admin Password"
